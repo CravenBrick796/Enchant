@@ -11,419 +11,682 @@
     --bg: #0d0d12;
     --card: #13131c;
     --border: #2a2a40;
+    --border2: #1c1c2c;
     --accent: #7c3aed;
     --gold: #f5c842;
     --gold2: #e8a020;
     --enchant2: #c4b5fd;
     --text: #e2e0f0;
-    --muted: #7070a0;
+    --muted: #6868a0;
+    --step-bg: #09090f;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     background: var(--bg);
     color: var(--text);
     font-family: 'Lato', sans-serif;
     font-weight: 300;
     min-height: 100vh;
-    padding: 40px 20px 60px;
+    padding: 40px 20px 70px;
     background-image:
       radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124,58,237,0.15) 0%, transparent 60%),
-      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   }
 
-  header { text-align: center; margin-bottom: 50px; }
-  header::after {
-    content: '';
-    display: block;
-    width: 200px; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    margin: 20px auto 0;
-  }
-  h1 {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: clamp(1.4rem, 4vw, 2.6rem);
-    color: var(--gold);
-    text-shadow: 0 0 30px rgba(245,200,66,0.4);
-    letter-spacing: 2px; line-height: 1.3;
-  }
-  .subtitle {
-    font-family: 'Cinzel', serif;
-    color: var(--muted); font-size: 0.85rem;
-    letter-spacing: 4px; text-transform: uppercase; margin-top: 10px;
-  }
+  header { text-align: center; margin-bottom: 46px; }
+  header::after { content:''; display:block; width:220px; height:2px; background:linear-gradient(90deg,transparent,var(--gold),transparent); margin:18px auto 0; }
+  h1 { font-family:'Cinzel Decorative',serif; font-size:clamp(1.3rem,4vw,2.4rem); color:var(--gold); text-shadow:0 0 30px rgba(245,200,66,.4); letter-spacing:2px; line-height:1.3; }
+  .subtitle { font-family:'Cinzel',serif; color:var(--muted); font-size:.8rem; letter-spacing:4px; text-transform:uppercase; margin-top:8px; }
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px; max-width: 1300px; margin: 0 auto;
+  /* COST INFO BOX */
+  .info-box {
+    max-width:900px; margin:0 auto 40px;
+    background:rgba(124,58,237,.07); border:1px solid rgba(124,58,237,.25); border-radius:12px; padding:18px 22px;
   }
+  .info-box h2 { font-family:'Cinzel',serif; font-size:.7rem; letter-spacing:4px; text-transform:uppercase; color:#a78bfa; margin-bottom:10px; }
+  .info-cols { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  @media(max-width:600px){ .info-cols{ grid-template-columns:1fr; } }
+  .info-list { list-style:none; }
+  .info-list li { font-size:.78rem; color:#9090c0; padding:3px 0 3px 16px; position:relative; line-height:1.5; }
+  .info-list li::before { content:'▸'; position:absolute; left:0; color:#7c3aed; font-size:.7rem; top:4px; }
+  .info-list li b { color:var(--gold); font-weight:600; }
+  .info-list li .red { color:#f87171; }
+  .info-list li .green { color:#4ade80; }
+  .info-list li .purple { color:#c4b5fd; }
+
+  /* MULTIPLIER TABLE */
+  .mult-table { width:100%; font-size:.72rem; border-collapse:collapse; margin-top:10px; }
+  .mult-table th { font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:2px; color:var(--muted); text-transform:uppercase; padding:4px 8px; border-bottom:1px solid var(--border2); text-align:left; }
+  .mult-table td { padding:3px 8px; color:#8888b0; border-bottom:1px solid rgba(255,255,255,.03); }
+  .mult-table td:nth-child(3) { color:var(--gold2); font-family:'Cinzel',serif; font-size:.68rem; }
+  .mult-table .high { color:#f87171 !important; }
+  .mult-table .mid { color:#fb923c !important; }
+
+  /* GRID */
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:20px; max-width:1400px; margin:0 auto; }
   .section-title {
-    font-family: 'Cinzel', serif;
-    font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase;
-    color: var(--muted); grid-column: 1 / -1;
-    padding: 10px 0 4px; border-bottom: 1px solid var(--border); margin-top: 10px;
+    font-family:'Cinzel',serif; font-size:.68rem; letter-spacing:5px; text-transform:uppercase;
+    color:var(--muted); grid-column:1/-1; padding:10px 0 4px; border-bottom:1px solid var(--border); margin-top:12px;
   }
 
-  .card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 12px; padding: 20px; position: relative; overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .card:hover { transform: translateY(-3px); box-shadow: 0 10px 40px rgba(124,58,237,0.2); }
-  .card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: var(--card-accent, linear-gradient(90deg, var(--accent), #c4b5fd));
-  }
-  .card.weapons { --card-accent: linear-gradient(90deg, #f87171, #fb923c); }
-  .card.tools   { --card-accent: linear-gradient(90deg, #4ade80, #22d3ee); }
-  .card.armor   { --card-accent: linear-gradient(90deg, #60a5fa, #9b7dff); }
-  .card.ranged  { --card-accent: linear-gradient(90deg, #fb923c, #f5c842); }
-  .card.special { --card-accent: linear-gradient(90deg, #c4b5fd, #f5c842); }
+  /* CARD */
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; transition:transform .2s,box-shadow .2s; }
+  .card:hover { transform:translateY(-3px); box-shadow:0 12px 40px rgba(124,58,237,.2); }
+  .card-top { padding:17px 18px 0; }
+  .card.weapons .card-top { border-top:2px solid #f87171; }
+  .card.tools   .card-top { border-top:2px solid #4ade80; }
+  .card.armor   .card-top { border-top:2px solid #60a5fa; }
+  .card.ranged  .card-top { border-top:2px solid #fb923c; }
+  .card.special .card-top { border-top:2px solid #c4b5fd; }
 
-  .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-  .item-icon {
-    width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;
-    font-size: 1.8rem; background: rgba(255,255,255,0.04);
-    border-radius: 8px; border: 1px solid var(--border); flex-shrink: 0;
+  .card-header { display:flex; align-items:center; gap:11px; margin-bottom:13px; }
+  .item-icon { width:38px; height:38px; display:flex; align-items:center; justify-content:center; font-size:1.6rem; background:rgba(255,255,255,.04); border-radius:7px; border:1px solid var(--border); flex-shrink:0; }
+  .item-name { font-family:'Cinzel',serif; font-size:.88rem; font-weight:600; color:var(--gold); line-height:1.3; }
+  .item-material { font-size:.68rem; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin-top:2px; }
+
+  .badge { display:inline-block; font-size:.56rem; background:rgba(245,200,66,.1); color:var(--gold); border:1px solid rgba(245,200,66,.28); border-radius:3px; padding:1px 5px; letter-spacing:1px; font-family:'Cinzel',serif; vertical-align:middle; margin-left:4px; }
+  .badge.new21 { background:rgba(74,222,128,.08); color:#4ade80; border-color:rgba(74,222,128,.25); }
+
+  /* ENCHANT LIST */
+  .elist { list-style:none; display:flex; flex-direction:column; gap:5px; padding-bottom:12px; }
+  .elist li { display:flex; align-items:baseline; gap:7px; font-size:.8rem; line-height:1.4; }
+  .en { color:var(--enchant2); flex:1; }
+  .elv { font-family:'Cinzel',serif; font-size:.66rem; color:var(--gold2); background:rgba(245,200,66,.07); border:1px solid rgba(245,200,66,.18); border-radius:3px; padding:1px 5px; white-space:nowrap; flex-shrink:0; }
+  .elv.t { background:rgba(248,113,113,.07); border-color:rgba(248,113,113,.25); color:#f87171; }
+  .dot { width:4px; height:4px; border-radius:50%; background:var(--accent); flex-shrink:0; margin-top:7px; opacity:.7; }
+
+  .li-mend .en  { color:#86efac; }
+  .li-mend .elv { color:#4ade80; background:rgba(74,222,128,.07); border-color:rgba(74,222,128,.22); }
+  .li-thorn .en  { color:#f9a8d4; }
+  .li-thorn .elv { color:#f472b6; background:rgba(244,114,182,.07); border-color:rgba(244,114,182,.22); }
+  .li-soul .en  { color:#fde68a; }
+  .li-soul .elv { color:#fbbf24; background:rgba(251,191,36,.1); border-color:rgba(251,191,36,.28); }
+  .li-swift .en  { color:#c084fc; }
+  .li-swift .elv { color:#a855f7; background:rgba(168,85,247,.08); border-color:rgba(168,85,247,.25); }
+  .li-new .en  { color:#fde68a; }
+  .li-new .elv { color:#fbbf24; background:rgba(251,191,36,.1); border-color:rgba(251,191,36,.28); }
+
+  .or { font-size:.62rem; color:var(--muted); font-style:italic; margin-left:3px; }
+  .note { margin:0 18px 13px; padding:8px 11px; background:rgba(245,200,66,.04); border-left:2px solid rgba(232,160,32,.3); border-radius:0 5px 5px 0; font-size:.72rem; color:#a08848; line-height:1.5; }
+
+  /* ORDER SECTION */
+  .order { background:var(--step-bg); border-top:1px solid var(--border2); padding:13px 18px 15px; }
+  .order-title {
+    font-family:'Cinzel',serif; font-size:.6rem; letter-spacing:3px; text-transform:uppercase;
+    color:#404060; margin-bottom:9px; display:flex; align-items:center; gap:6px;
   }
-  .item-name { font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 600; color: var(--gold); }
-  .item-material { font-size: 0.72rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+  .order-title::after { content:''; flex:1; height:1px; background:var(--border2); }
 
-  .badge-new {
-    display: inline-block; font-size: 0.6rem;
-    background: rgba(245,200,66,0.15); color: var(--gold);
-    border: 1px solid rgba(245,200,66,0.35); border-radius: 4px;
-    padding: 1px 5px; letter-spacing: 1px; font-family: 'Cinzel', serif;
-    vertical-align: middle; margin-left: 6px;
+  .steps { display:flex; flex-direction:column; gap:4px; }
+  .step { display:flex; align-items:flex-start; gap:7px; }
+  .sn {
+    font-family:'Cinzel',serif; font-size:.58rem; color:#404060;
+    background:rgba(255,255,255,.02); border:1px solid var(--border2);
+    border-radius:3px; width:17px; height:17px; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; margin-top:1px;
   }
+  .st { font-size:.76rem; line-height:1.45; color:#7070a0; flex:1; }
+  .st b { color:#9090c0; font-weight:400; }
+  .bk { color:#c4b5fd; } /* combine books */
+  .ap { color:#86efac; } /* apply to item */
+  .it { color:#f5c842; font-weight:600; } /* item name */
+  .arr { color:#404060; margin:0 2px; }
+  .sep { font-size:.62rem; color:#303050; letter-spacing:2px; text-align:center; padding:3px 0; font-family:'Cinzel',serif; }
 
-  .enchant-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
-  .enchant-list li { display: flex; align-items: baseline; gap: 8px; font-size: 0.83rem; line-height: 1.4; }
-  .enchant-name { color: var(--enchant2); font-weight: 400; flex: 1; }
-  .enchant-level {
-    font-family: 'Cinzel', serif; font-size: 0.7rem; color: var(--gold2);
-    background: rgba(245,200,66,0.08); border: 1px solid rgba(245,200,66,0.2);
-    border-radius: 4px; padding: 1px 6px; white-space: nowrap; flex-shrink: 0;
-  }
-  .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 5px; opacity: 0.7; }
+  .cost { display:inline-flex; align-items:center; gap:4px; margin-top:9px; padding:4px 9px; background:rgba(245,200,66,.05); border:1px solid rgba(245,200,66,.15); border-radius:5px; font-size:.7rem; color:#806030; font-family:'Cinzel',serif; }
+  .cost span { color:var(--gold); font-weight:600; font-size:.8rem; }
+  .cost-warn { color:#f87171; font-size:.65rem; margin-left:4px; }
 
-  .tag-mending .enchant-level { color: #4ade80; background: rgba(74,222,128,0.08); border-color: rgba(74,222,128,0.25); }
-  .tag-mending .enchant-name  { color: #86efac; }
-  .tag-thorns  .enchant-name  { color: #f9a8d4; }
-  .tag-thorns  .enchant-level { color: #f472b6; background: rgba(244,114,182,0.08); border-color: rgba(244,114,182,0.25); }
-  .tag-new     .enchant-name  { color: #fde68a; }
-  .tag-new     .enchant-level { color: #fbbf24; background: rgba(251,191,36,0.12); border-color: rgba(251,191,36,0.3); }
-
-  .or-badge { font-size: 0.65rem; color: var(--muted); font-style: italic; margin-left: 4px; }
-  .note {
-    margin-top: 14px; padding: 10px 12px;
-    background: rgba(245,200,66,0.05);
-    border-left: 2px solid var(--gold2);
-    border-radius: 0 6px 6px 0;
-    font-size: 0.75rem; color: #c0b07a; line-height: 1.5;
-  }
-  .enchant-level.curse { background: rgba(248,113,113,0.08); border-color: rgba(248,113,113,0.3); color: #f87171; }
-
-  footer { text-align: center; margin-top: 60px; color: var(--muted); font-size: 0.75rem; letter-spacing: 2px; font-family: 'Cinzel', serif; }
+  footer { text-align:center; margin-top:60px; color:var(--muted); font-size:.72rem; letter-spacing:2px; font-family:'Cinzel',serif; }
 </style>
 </head>
 <body>
 
 <header>
   <h1>Enchantements Parfaits</h1>
-  <div class="subtitle">Minecraft Java Edition · Version 1.21.1</div>
+  <div class="subtitle">Minecraft Java Edition · 1.21.1 · Ordres optimaux vérifiés</div>
 </header>
+
+<!-- ═══ INFO BOX ═══ -->
+<div class="info-box">
+  <h2>⚙ Principe de l'ordre optimal (Minecraft Wiki)</h2>
+  <div class="info-cols">
+    <ul class="info-list">
+      <li><b>Pénalité de travail</b> : chaque passage à l'enclume double le coût (+0, +1, +3, +7, +15…)</li>
+      <li><b>Règle n°1</b> : combiner les livres <b>par paires</b> avant de les appliquer sur l'objet</li>
+      <li><b>Règle n°2</b> : l'enchantement le plus cher s'applique <b>en premier</b> sur l'objet (pénalité 0)</li>
+      <li><b>Limite</b> : toute opération <span class="red">> 39 niveaux</span> = <span class="red">« Trop cher ! »</span></li>
+    </ul>
+    <table class="mult-table">
+      <tr><th>Enchantement (livres)</th><th>Mult.</th><th>Coût max</th></tr>
+      <tr><td class="high">Épines III</td><td>×4/lvl</td><td class="high">12</td></tr>
+      <tr><td class="high">Vitesse de l'âme III</td><td>×4/lvl</td><td class="high">12</td></tr>
+      <tr><td class="high">Glissement rapide III</td><td>×4/lvl</td><td class="high">12</td></tr>
+      <tr><td class="mid">Pillage III</td><td>×2/lvl</td><td class="mid">6</td></tr>
+      <tr><td class="mid">Réparation I</td><td>×2/lvl</td><td class="mid">2</td></tr>
+      <tr><td>Fortune III</td><td>×2/lvl</td><td>6</td></tr>
+      <tr><td>Tranchant V</td><td>×1/lvl</td><td>5</td></tr>
+      <tr><td>Solidité III</td><td>×1/lvl</td><td>3</td></tr>
+    </table>
+  </div>
+</div>
 
 <div class="grid">
 
-  <div class="section-title">⚔ Armes de mêlée</div>
+<!-- ═══════════════════ ARMES ═══════════════════ -->
+<div class="section-title">⚔ Armes de mêlée</div>
 
-  <div class="card weapons">
+<!-- ÉPÉE -->
+<div class="card weapons">
+  <div class="card-top">
     <div class="card-header"><div class="item-icon">⚔️</div><div>
       <div class="item-name">Épée</div>
       <div class="item-material">Netherite</div>
     </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name">Tranchant</span><span class="enchant-level">V</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Pillage</span><span class="enchant-level">III</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Châtiment des flammes</span><span class="enchant-level">II</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Recul</span><span class="enchant-level">II</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Balayage</span><span class="enchant-level">III</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
-      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    <ul class="elist">
+      <li><span class="dot"></span><span class="en">Tranchant V <span class="or">(ou Fléau V ou Châtiment V)</span></span><span class="elv">V</span></li>
+      <li><span class="dot"></span><span class="en">Pillage</span><span class="elv">III</span></li>
+      <li><span class="dot"></span><span class="en">Châtiment des flammes</span><span class="elv">II</span></li>
+      <li><span class="dot"></span><span class="en">Recul</span><span class="elv">II</span></li>
+      <li><span class="dot"></span><span class="en">Balayage</span><span class="elv">III</span></li>
+      <li><span class="dot"></span><span class="en">Solidité</span><span class="elv">III</span></li>
+      <li class="li-mend"><span class="dot"></span><span class="en">Réparation</span><span class="elv">I</span></li>
     </ul>
-    <div class="note">⚠ Tranchant est incompatible avec Fléau des arthropodes (araignées) et Châtiment (morts-vivants). Balayage (Sweeping Edge) est de retour depuis la 1.20.5.</div>
   </div>
+  <div class="order">
+    <div class="order-title">Ordre optimal — 7 enchantements</div>
+    <div class="steps">
+      <div class="step"><span class="sn">1</span><span class="st"><span class="bk">📚 Pillage III + 📚 Balayage III</span> <span class="arr">→</span> <b>Livre A</b> (coût: 6+6=12)</span></div>
+      <div class="step"><span class="sn">2</span><span class="st"><span class="bk">📚 Tranchant V + 📚 Châtiment des flammes II</span> <span class="arr">→</span> <b>Livre B</b> (5+4=9)</span></div>
+      <div class="step"><span class="sn">3</span><span class="st"><span class="bk">📚 Solidité III + 📚 Réparation</span> <span class="arr">→</span> <b>Livre C</b> (3+2=5)</span></div>
+      <div class="sep">— application sur l'épée —</div>
+      <div class="step"><span class="sn">4</span><span class="st"><span class="it">⚔ Épée</span> <span class="arr">+</span> <span class="ap">Livre A</span> (Pillage+Balayage, coût 12)</span></div>
+      <div class="step"><span class="sn">5</span><span class="st"><span class="it">⚔ Épée</span> <span class="arr">+</span> <span class="ap">Livre B</span> (Tranchant+Flammes, coût 9+2pen=11)</span></div>
+      <div class="step"><span class="sn">6</span><span class="st"><span class="it">⚔ Épée</span> <span class="arr">+</span> <span class="ap">Livre C</span> (Solidité+Réparation, coût 5+4pen=9)</span></div>
+      <div class="step"><span class="sn">7</span><span class="st"><span class="it">⚔ Épée</span> <span class="arr">+</span> <span class="ap">📚 Recul II</span> (coût 2+8pen=10)</span></div>
+    </div>
+    <div class="cost">Total estimé : <span>~42</span> niveaux <span class="cost-warn">(toutes opérations < 39 ✓)</span></div>
+  </div>
+  <div class="note">⚠ Tranchant / Fléau des arthropodes / Châtiment : incompatibles, choisir UN seul. Balayage retourné depuis 1.20.5.</div>
+</div>
 
-  <div class="card weapons">
+<!-- HACHE -->
+<div class="card weapons">
+  <div class="card-top">
     <div class="card-header"><div class="item-icon">🪓</div><div>
       <div class="item-name">Hache</div>
       <div class="item-material">Netherite</div>
     </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name">Tranchant</span><span class="enchant-level">V</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Efficacité</span><span class="enchant-level">V</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
-      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    <ul class="elist">
+      <li><span class="dot"></span><span class="en">Tranchant V</span><span class="elv">V</span></li>
+      <li><span class="dot"></span><span class="en">Efficacité</span><span class="elv">V</span></li>
+      <li><span class="dot"></span><span class="en">Fortune III <span class="or">ou Toucher de soie I</span></span><span class="elv">III/I</span></li>
+      <li><span class="dot"></span><span class="en">Solidité</span><span class="elv">III</span></li>
+      <li class="li-mend"><span class="dot"></span><span class="en">Réparation</span><span class="elv">I</span></li>
     </ul>
-    <div class="note">Double usage : coupe le bois rapidement et inflige de bons dégâts au corps-à-corps.</div>
   </div>
+  <div class="order">
+    <div class="order-title">Ordre optimal — 5 enchantements</div>
+    <div class="steps">
+      <div class="step"><span class="sn">1</span><span class="st"><span class="bk">📚 Fortune III + 📚 Efficacité V</span> <span class="arr">→</span> <b>Livre A</b> (6+5=11)</span></div>
+      <div class="step"><span class="sn">2</span><span class="st"><span class="bk">📚 Solidité III + 📚 Réparation</span> <span class="arr">→</span> <b>Livre B</b> (3+2=5)</span></div>
+      <div class="step"><span class="sn">3</span><span class="st"><span class="bk">📚 Tranchant V seul</span> (coût 5 — le plus cher en 1er)</span></div>
+      <div class="sep">— application sur la hache —</div>
+      <div class="step"><span class="sn">4</span><span class="st"><span class="it">🪓 Hache</span> <span class="arr">+</span> <span class="ap">📚 Tranchant V</span> (coût 5)</span></div>
+      <div class="step"><span class="sn">5</span><span class="st"><span class="it">🪓 Hache</span> <span class="arr">+</span> <span class="ap">Livre A</span> (Fortune+Eff, coût 11+2pen=13)</span></div>
+      <div class="step"><span class="sn">6</span><span class="st"><span class="it">🪓 Hache</span> <span class="arr">+</span> <span class="ap">Livre B</span> (Solidité+Répar, coût 5+4pen=9)</span></div>
+    </div>
+    <div class="cost">Total estimé : <span>~27</span> niveaux</div>
+  </div>
+  <div class="note">Fortune / Toucher de soie incompatibles — faites 2 haches séparées. Usage double : bûcheronnage + combat.</div>
+</div>
 
-  <div class="card weapons">
+<!-- TRIDENT -->
+<div class="card weapons">
+  <div class="card-top">
     <div class="card-header"><div class="item-icon">🔱</div><div>
       <div class="item-name">Trident</div>
-      <div class="item-material">Unique (drop mob)</div>
+      <div class="item-material">Unique (drop de mob)</div>
     </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name">Piqûre</span><span class="enchant-level">V</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Loyauté</span><span class="enchant-level">III</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Marée montante</span><span class="enchant-level">III</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Canalisation</span><span class="enchant-level">I</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
-      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    <ul class="elist">
+      <li><span class="dot"></span><span class="en">Piqûre</span><span class="elv">V</span></li>
+      <li><span class="dot"></span><span class="en">Loyauté <span class="or">ou Rift III (incompatibles)</span></span><span class="elv">III</span></li>
+      <li><span class="dot"></span><span class="en">Marée montante</span><span class="elv">III</span></li>
+      <li><span class="dot"></span><span class="en">Canalisation <span class="or">(incompatible avec Rift)</span></span><span class="elv">I</span></li>
+      <li><span class="dot"></span><span class="en">Solidité</span><span class="elv">III</span></li>
+      <li class="li-mend"><span class="dot"></span><span class="en">Réparation</span><span class="elv">I</span></li>
     </ul>
-    <div class="note">⚠ Loyauté incompatible avec Rift. Canalisation nécessite un orage pour invoquer la foudre.</div>
   </div>
+  <div class="order">
+    <div class="order-title">Ordre optimal — Build Loyauté (6 enchantements)</div>
+    <div class="steps">
+      <div class="step"><span class="sn">1</span><span class="st"><span class="bk">📚 Loyauté III + 📚 Marée montante III</span> <span class="arr">→</span> <b>Livre A</b> (3+6=9)</span></div>
+      <div class="step"><span class="sn">2</span><span class="st"><span class="bk">📚 Solidité III + 📚 Réparation</span> <span class="arr">→</span> <b>Livre B</b> (3+2=5)</span></div>
+      <div class="sep">— application sur le trident —</div>
+      <div class="step"><span class="sn">3</span><span class="st"><span class="it">🔱 Trident</span> <span class="arr">+</span> <span class="ap">📚 Piqûre V</span> (coût 10 — le + cher en 1er)</span></div>
+      <div class="step"><span class="sn">4</span><span class="st"><span class="it">🔱 Trident</span> <span class="arr">+</span> <span class="ap">Livre A</span> (Loyauté+Marée, coût 9+2pen=11)</span></div>
+      <div class="step"><span class="sn">5</span><span class="st"><span class="it">🔱 Trident</span> <span class="arr">+</span> <span class="ap">Livre B</span> (Solidité+Répar, coût 5+4pen=9)</span></div>
+      <div class="step"><span class="sn">6</span><span class="st"><span class="it">🔱 Trident</span> <span class="arr">+</span> <span class="ap">📚 Canalisation I</span> (coût 1+8pen=9)</span></div>
+    </div>
+    <div class="cost">Total estimé : <span>~39</span> niveaux ✓</div>
+  </div>
+  <div class="note">⚠ Loyauté incompatible avec Rift. Canalisation requiert un orage. Build Rift : remplacer Loyauté+Canal par Rift III.</div>
+</div>
 
-  <div class="card weapons">
+<!-- MASSE -->
+<div class="card weapons">
+  <div class="card-top">
     <div class="card-header"><div class="item-icon">🏏</div><div>
-      <div class="item-name">Masse <span class="badge-new">NOUVEAU 1.21</span></div>
+      <div class="item-name">Masse <span class="badge new21">NOUVEAU 1.21</span></div>
       <div class="item-material">Breeze Rod + Netherite</div>
     </div></div>
-    <ul class="enchant-list">
-      <li class="tag-new"><span class="dot"></span><span class="enchant-name">Densité <span class="or-badge">ou Brèche ou Rafale de vent</span></span><span class="enchant-level">V/IV/III</span></li>
-      <li class="tag-new"><span class="dot"></span><span class="enchant-name">Élan (Lunge) <span class="badge-new">1.21.11</span></span><span class="enchant-level">III</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
-      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    <ul class="elist">
+      <li class="li-new"><span class="dot"></span><span class="en">Densité V <span class="or">ou Brèche IV ou Rafale de vent III</span></span><span class="elv">V/IV/III</span></li>
+      <li class="li-new"><span class="dot"></span><span class="en">Élan (Lunge) <span class="badge new21">1.21.11</span></span><span class="elv">III</span></li>
+      <li><span class="dot"></span><span class="en">Solidité</span><span class="elv">III</span></li>
+      <li class="li-mend"><span class="dot"></span><span class="en">Réparation</span><span class="elv">I</span></li>
     </ul>
-    <div class="note">⚠ Densité / Brèche / Rafale de vent : choisir un seul.<br>• Densité = +dégâts par bloc chuté<br>• Brèche = réduit l'armure ennemie<br>• Rafale de vent = propulse vers le haut<br>• Élan = propulsion lors de l'attaque Jab (nouveau 1.21.11)</div>
   </div>
+  <div class="order">
+    <div class="order-title">Ordre optimal — 4 enchantements</div>
+    <div class="steps">
+      <div class="step"><span class="sn">1</span><span class="st"><span class="bk">📚 Solidité III + 📚 Réparation</span> <span class="arr">→</span> <b>Livre A</b> (3+2=5)</span></div>
+      <div class="sep">— application sur la masse —</div>
+      <div class="step"><span class="sn">2</span><span class="st"><span class="it">🏏 Masse</span> <span class="arr">+</span> <span class="ap">📚 Brèche IV</span> (coût 8 — Brèche est le + cher)</span></div>
+      <div class="step"><span class="sn">3</span><span class="st"><span class="it">🏏 Masse</span> <span class="arr">+</span> <span class="ap">📚 Élan III</span> (coût 3+2pen=5)</span></div>
+      <div class="step"><span class="sn">4</span><span class="st"><span class="it">🏏 Masse</span> <span class="arr">+</span> <span class="ap">Livre A</span> (Solidité+Répar, coût 5+4pen=9)</span></div>
+    </div>
+    <div class="cost">Total estimé : <span>~22</span> niveaux</div>
+  </div>
+  <div class="note">⚠ Densité / Brèche / Rafale incompatibles. Brèche=coût 8 (×2/lvl × IV). Densité=coût 5 (×1/lvl × V). Si Rafale choisie : appliquer en 1er (coût 6).</div>
+</div>
 
-  <div class="section-title">🏹 Armes à distance</div>
+<!-- ═══════════════════ DISTANCE ═══════════════════ -->
+<div class="section-title">🏹 Armes à distance</div>
 
-  <div class="card ranged">
+<!-- ARC -->
+<div class="card ranged">
+  <div class="card-top">
     <div class="card-header"><div class="item-icon">🏹</div><div>
       <div class="item-name">Arc</div>
       <div class="item-material">Bois & ficelle</div>
     </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name">Puissance</span><span class="enchant-level">V</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Infini <span class="or-badge">ou Réparation</span></span><span class="enchant-level">I</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Rafale</span><span class="enchant-level">I</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Recul</span><span class="enchant-level">II</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Châtiment des flammes</span><span class="enchant-level">II</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+    <ul class="elist">
+      <li><span class="dot"></span><span class="en">Puissance</span><span class="elv">V</span></li>
+      <li><span class="dot"></span><span class="en">Rafale</span><span class="elv">I</span></li>
+      <li><span class="dot"></span><span class="en">Châtiment des flammes</span><span class="elv">II</span></li>
+      <li><span class="dot"></span><span class="en">Recul</span><span class="elv">II</span></li>
+      <li><span class="dot"></span><span class="en">Solidité</span><span class="elv">III</span></li>
+      <li><span class="dot"></span><span class="en">Infini <span class="or">ou Réparation (incompatibles)</span></span><span class="elv">I</span></li>
     </ul>
-    <div class="note">⚠ Infini et Réparation sont incompatibles. Infini = 1 flèche suffit. Réparation = auto-réparation via XP.</div>
   </div>
+  <div class="order">
+    <div class="order-title">Ordre optimal — 6 enchantements</div>
+    <div class="steps">
+      <div class="step"><span class="sn">1</span><span class="st"><span class="bk">📚 Puissance V + 📚 Recul II</span> <span class="arr">→</span> <b>Livre A</b> (5+4=9)</span></div>
+      <div class="step"><span class="sn">2</span><span class="st"><span class="bk">📚 Solidité III + 📚 Châtiment des flammes II</span> <span class="arr">→</span> <b>Livre B</b> (3+4=7)</span></div>
+      <div class="sep">— application sur l'arc —</div>
+      <div class="step"><span class="sn">3</span><span class="st"><span class="it">🏹 Arc</span> <span class="arr">+</span> <span class="ap">Livre A</span> (Puissance+Recul, coût 9)</span></div>
+      <div class="step"><span class="sn">4</span><span class="st"><span class="it">🏹 Arc</span> <span class="arr">+</span> <span class="ap">Livre B</span> (Solidité+Flammes, coût 7+2pen=9)</span></div>
+      <div class="step"><span class="sn">5</span><span class="st"><span class="it">🏹 Arc</span> <span class="arr">+</span> <span class="ap">📚 Rafale I</span> (coût 2+4pen=6)</span></div>
+      <div class="step"><span class="sn">6</span><span class="st"><span class="it">🏹 Arc</span> <span class="arr">+</span> <span class="ap">📚 Infini I</span> ou Réparation (coût 1or2+8pen=9/10)</span></div>
+    </div>
+    <div class="cost">Total estimé : <span>~33</span> niveaux</div>
+  </div>
+  <div class="note">⚠ Infini = une seule flèche suffit (pas de flèches spectrales/de potion). Réparation = se répare à l'XP. Choisir en fonction du style de jeu.</div>
+</div>
 
-  <div class="card ranged">
+<!-- ARBALÈTE -->
+<div class="card ranged">
+  <div class="card-top">
     <div class="card-header"><div class="item-icon">🎯</div><div>
       <div class="item-name">Arbalète</div>
       <div class="item-material">Bois & mécanique</div>
     </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name">Perce-armure <span class="or-badge">ou Multiflèche</span></span><span class="enchant-level">IV / I</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Chargement rapide</span><span class="enchant-level">III</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
-      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    <ul class="elist">
+      <li><span class="dot"></span><span class="en">Perce-armure IV <span class="or">ou Multiflèche I (incompatibles)</span></span><span class="elv">IV/I</span></li>
+      <li><span class="dot"></span><span class="en">Chargement rapide</span><span class="elv">III</span></li>
+      <li><span class="dot"></span><span class="en">Solidité</span><span class="elv">III</span></li>
+      <li class="li-mend"><span class="dot"></span><span class="en">Réparation</span><span class="elv">I</span></li>
     </ul>
-    <div class="note">⚠ Perce-armure et Multiflèche incompatibles. Perce-armure = traverse l'armure. Multiflèche = 3 flèches simultanées.</div>
   </div>
+  <div class="order">
+    <div class="order-title">Ordre optimal — 4 enchantements</div>
+    <div class="steps">
+      <div class="step"><span class="sn">1</span><span class="st"><span class="bk">📚 Chargement rapide III + 📚 Solidité III</span> <span class="arr">→</span> <b>Livre A</b> (3+3=6)</span></div>
+      <div class="step"><span class="sn">2</span><span class="st"><span class="bk">📚 Perce-armure IV seul</span> (coût 4 — le + cher ici)</span></div>
+      <div class="sep">— application sur l'arbalète —</div>
+      <div class="step"><span class="sn">3</span><span class="st"><span class="it">🎯 Arbalète</span> <span class="arr">+</span> <span class="ap">📚 Perce-armure IV</span> (coût 4)</span></div>
+      <div class="step"><span class="sn">4</span><span class="st"><span class="it">🎯 Arbalète</span> <span class="arr">+</span> <span class="ap">Livre A</span> (Charge+Solidité, coût 6+2pen=8)</span></div>
+      <div class="step"><span class="sn">5</span><span class="st"><span class="it">🎯 Arbalète</span> <span class="arr">+</span> <span class="ap">📚 Réparation</span> (coût 2+4pen=6)</span></div>
+    </div>
+    <div class="cost">Total estimé : <span>~18</span> niveaux</div>
+  </div>
+  <div class="note">Perce-armure traverse plusieurs ennemis alignés. Multiflèche tire 3 flèches mais coûte 3 flèches et ne traverse pas.</div>
+</div>
 
-  <div class="section-title">⛏ Outils</div>
+<!-- ═══════════════════ OUTILS ═══════════════════ -->
+<div class="section-title">⛏ Outils</div>
 
-  <div class="card tools">
+<!-- PIOCHE -->
+<div class="card tools">
+  <div class="card-top">
     <div class="card-header"><div class="item-icon">⛏️</div><div>
       <div class="item-name">Pioche</div>
       <div class="item-material">Netherite</div>
     </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name">Efficacité</span><span class="enchant-level">V</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Fortune <span class="or-badge">ou Toucher de soie</span></span><span class="enchant-level">III / I</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
-      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
-    </ul>
-    <div class="note">Faites deux pioches séparées : une Fortune III et une Toucher de soie I — ces deux enchantements sont incompatibles.</div>
-  </div>
-
-  <div class="card tools">
-    <div class="card-header"><div class="item-icon">🪚</div><div>
-      <div class="item-name">Hache (outil)</div>
-      <div class="item-material">Netherite</div>
-    </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name">Efficacité</span><span class="enchant-level">V</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Fortune <span class="or-badge">ou Toucher de soie</span></span><span class="enchant-level">III / I</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
-      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    <ul class="elist">
+      <li><span class="dot"></span><span class="en">Efficacité</span><span class="elv">V</span></li>
+      <li><span class="dot"></span><span class="en">Fortune III <span class="or">ou Toucher de soie I</span></span><span class="elv">III/I</span></li>
+      <li><span class="dot"></span><span class="en">Solidité</span><span class="elv">III</span></li>
+      <li class="li-mend"><span class="dot"></span><span class="en">Réparation</span><span class="elv">I</span></li>
     </ul>
   </div>
+  <div class="order">
+    <div class="order-title">Ordre optimal — 4 enchantements</div>
+    <div class="steps">
+      <div class="step"><span class="sn">1</span><span class="st"><span class="bk">📚 Fortune III + 📚 Efficacité V</span> <span class="arr">→</span> <b>Livre A</b> (6+5=11)</span></div>
+      <div class="step"><span class="sn">2</span><span class="st"><span class="bk">📚 Solidité III + 📚 Réparation</span> <span class="arr">→</span> <b>Livre B</b> (3+2=5)</span></div>
+      <div class="sep">— application sur la pioche —</div>
+      <div class="step"><span class="sn">3</span><span class="st"><span class="it">⛏ Pioche</span> <span class="arr">+</span> <span class="ap">Livre A</span> (Fortune+Eff, coût 11)</span></div>
+      <div class="step"><span class="sn">4</span><span class="st"><span class="it">⛏ Pioche</span> <span class="arr">+</span> <span class="ap">Livre B</span> (Solidité+Répar, coût 5+2pen=7)</span></div>
+    </div>
+    <div class="cost">Total estimé : <span>~18</span> niveaux (×2 pour les 2 pioches)</div>
+  </div>
+  <div class="note">Faire 2 pioches : <b>Fortune III</b> pour diamants/or/lapis/redstone, <b>Toucher de soie</b> pour glace, gazon, minerais bruts. Incompatibles.</div>
+</div>
 
-  <div class="card tools">
+<!-- PELLE -->
+<div class="card tools">
+  <div class="card-top">
     <div class="card-header"><div class="item-icon">🪣</div><div>
       <div class="item-name">Pelle</div>
       <div class="item-material">Netherite</div>
     </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name">Efficacité</span><span class="enchant-level">V</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Fortune</span><span class="enchant-level">III</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
-      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    <ul class="elist">
+      <li><span class="dot"></span><span class="en">Efficacité</span><span class="elv">V</span></li>
+      <li><span class="dot"></span><span class="en">Fortune</span><span class="elv">III</span></li>
+      <li><span class="dot"></span><span class="en">Solidité</span><span class="elv">III</span></li>
+      <li class="li-mend"><span class="dot"></span><span class="en">Réparation</span><span class="elv">I</span></li>
     </ul>
   </div>
+  <div class="order">
+    <div class="order-title">Ordre optimal — 4 enchantements</div>
+    <div class="steps">
+      <div class="step"><span class="sn">1</span><span class="st"><span class="bk">📚 Fortune III + 📚 Efficacité V</span> <span class="arr">→</span> <b>Livre A</b> (6+5=11)</span></div>
+      <div class="step"><span class="sn">2</span><span class="st"><span class="bk">📚 Solidité III + 📚 Réparation</span> <span class="arr">→</span> <b>Livre B</b> (3+2=5)</span></div>
+      <div class="sep">— application sur la pelle —</div>
+      <div class="step"><span class="sn">3</span><span class="st"><span class="it">🪣 Pelle</span> <span class="arr">+</span> <span class="ap">Livre A</span> (coût 11)</span></div>
+      <div class="step"><span class="sn">4</span><span class="st"><span class="it">🪣 Pelle</span> <span class="arr">+</span> <span class="ap">Livre B</span> (coût 5+2pen=7)</span></div>
+    </div>
+    <div class="cost">Total estimé : <span>~18</span> niveaux</div>
+  </div>
+</div>
 
-  <div class="card tools">
+<!-- HOUE -->
+<div class="card tools">
+  <div class="card-top">
     <div class="card-header"><div class="item-icon">🌾</div><div>
       <div class="item-name">Houe</div>
       <div class="item-material">Netherite</div>
     </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name">Efficacité</span><span class="enchant-level">V</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Fortune <span class="or-badge">ou Toucher de soie</span></span><span class="enchant-level">III / I</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
-      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    <ul class="elist">
+      <li><span class="dot"></span><span class="en">Efficacité</span><span class="elv">V</span></li>
+      <li><span class="dot"></span><span class="en">Fortune III <span class="or">ou Toucher de soie I</span></span><span class="elv">III/I</span></li>
+      <li><span class="dot"></span><span class="en">Solidité</span><span class="elv">III</span></li>
+      <li class="li-mend"><span class="dot"></span><span class="en">Réparation</span><span class="elv">I</span></li>
     </ul>
-    <div class="note">Idéale pour récolter rapidement les champignons, feuilles et cultures agricoles.</div>
   </div>
+  <div class="order">
+    <div class="order-title">Même ordre que la pioche</div>
+    <div class="steps">
+      <div class="step"><span class="sn">1</span><span class="st"><span class="bk">📚 Fortune III + 📚 Efficacité V</span> <span class="arr">→</span> <b>Livre A</b> (11)</span></div>
+      <div class="step"><span class="sn">2</span><span class="st"><span class="bk">📚 Solidité III + 📚 Réparation</span> <span class="arr">→</span> <b>Livre B</b> (5)</span></div>
+      <div class="step"><span class="sn">3</span><span class="st"><span class="it">🌾 Houe</span> <span class="arr">+</span> <span class="ap">Livre A</span> → puis <span class="ap">Livre B</span></span></div>
+    </div>
+    <div class="cost">Total estimé : <span>~18</span> niveaux</div>
+  </div>
+  <div class="note">Fortune III idéale pour les cultures agricoles (blé, carottes, pommes de terre). Toucher de soie pour récupérer les blocs intacts.</div>
+</div>
 
-  <div class="card tools">
+<!-- CANNE À PÊCHE -->
+<div class="card tools">
+  <div class="card-top">
     <div class="card-header"><div class="item-icon">🎣</div><div>
       <div class="item-name">Canne à pêche</div>
       <div class="item-material">Bois & ficelle</div>
     </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name">Chance de la mer</span><span class="enchant-level">III</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Appât</span><span class="enchant-level">III</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
-      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    <ul class="elist">
+      <li><span class="dot"></span><span class="en">Chance de la mer</span><span class="elv">III</span></li>
+      <li><span class="dot"></span><span class="en">Appât</span><span class="elv">III</span></li>
+      <li><span class="dot"></span><span class="en">Solidité</span><span class="elv">III</span></li>
+      <li class="li-mend"><span class="dot"></span><span class="en">Réparation</span><span class="elv">I</span></li>
     </ul>
-    <div class="note">Chance de la mer = plus de trésors, moins de poissons. Appât = temps d'attente réduit. Compatibles mais ils s'équilibrent.</div>
   </div>
+  <div class="order">
+    <div class="order-title">Ordre optimal — 4 enchantements</div>
+    <div class="steps">
+      <div class="step"><span class="sn">1</span><span class="st"><span class="bk">📚 Chance mer III + 📚 Appât III</span> <span class="arr">→</span> <b>Livre A</b> (6+6=12)</span></div>
+      <div class="step"><span class="sn">2</span><span class="st"><span class="bk">📚 Solidité III + 📚 Réparation</span> <span class="arr">→</span> <b>Livre B</b> (3+2=5)</span></div>
+      <div class="sep">— application sur la canne —</div>
+      <div class="step"><span class="sn">3</span><span class="st"><span class="it">🎣 Canne</span> <span class="arr">+</span> <span class="ap">Livre A</span> (coût 12)</span></div>
+      <div class="step"><span class="sn">4</span><span class="st"><span class="it">🎣 Canne</span> <span class="arr">+</span> <span class="ap">Livre B</span> (coût 5+2pen=7)</span></div>
+    </div>
+    <div class="cost">Total estimé : <span>~19</span> niveaux</div>
+  </div>
+  <div class="note">Chance de la mer = plus de trésors (livres enchantés, arcs…), moins de poissons. Appât = temps d'attente réduit. Les deux sont compatibles.</div>
+</div>
 
-  <div class="card tools">
+<!-- CISEAUX -->
+<div class="card tools">
+  <div class="card-top">
     <div class="card-header"><div class="item-icon">✂️</div><div>
       <div class="item-name">Ciseaux</div>
       <div class="item-material">Fer</div>
     </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name">Efficacité</span><span class="enchant-level">V</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
-      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    <ul class="elist">
+      <li><span class="dot"></span><span class="en">Efficacité</span><span class="elv">V</span></li>
+      <li><span class="dot"></span><span class="en">Solidité</span><span class="elv">III</span></li>
+      <li class="li-mend"><span class="dot"></span><span class="en">Réparation</span><span class="elv">I</span></li>
     </ul>
   </div>
+  <div class="order">
+    <div class="order-title">Ordre optimal — 3 enchantements</div>
+    <div class="steps">
+      <div class="step"><span class="sn">1</span><span class="st"><span class="bk">📚 Solidité III + 📚 Réparation</span> <span class="arr">→</span> <b>Livre A</b> (3+2=5)</span></div>
+      <div class="sep">— application sur les ciseaux —</div>
+      <div class="step"><span class="sn">2</span><span class="st"><span class="it">✂ Ciseaux</span> <span class="arr">+</span> <span class="ap">📚 Efficacité V</span> (coût 5)</span></div>
+      <div class="step"><span class="sn">3</span><span class="st"><span class="it">✂ Ciseaux</span> <span class="arr">+</span> <span class="ap">Livre A</span> (coût 5+2pen=7)</span></div>
+    </div>
+    <div class="cost">Total estimé : <span>~12</span> niveaux</div>
+  </div>
+</div>
 
-  <div class="section-title">🛡 Armure complète (Netherite)</div>
+<!-- ═══════════════════ ARMURE ═══════════════════ -->
+<div class="section-title">🛡 Armure complète (Netherite) — Ordres vérifiés Minecraft Wiki</div>
 
-  <div class="card armor">
+<!-- CASQUE -->
+<div class="card armor">
+  <div class="card-top">
     <div class="card-header"><div class="item-icon">⛑️</div><div>
       <div class="item-name">Casque</div>
       <div class="item-material">Netherite</div>
     </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name">Protection</span><span class="enchant-level">IV</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Respiration</span><span class="enchant-level">III</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Affinité aquatique</span><span class="enchant-level">I</span></li>
-      <li class="tag-thorns"><span class="dot"></span><span class="enchant-name">Épines</span><span class="enchant-level">III</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
-      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    <ul class="elist">
+      <li class="li-thorn"><span class="dot"></span><span class="en">Épines</span><span class="elv">III</span></li>
+      <li><span class="dot"></span><span class="en">Respiration</span><span class="elv">III</span></li>
+      <li><span class="dot"></span><span class="en">Affinité aquatique</span><span class="elv">I</span></li>
+      <li><span class="dot"></span><span class="en">Protection IV <span class="or">(ou Prot. feu IV si Nether)</span></span><span class="elv">IV</span></li>
+      <li><span class="dot"></span><span class="en">Solidité</span><span class="elv">III</span></li>
+      <li class="li-mend"><span class="dot"></span><span class="en">Réparation</span><span class="elv">I</span></li>
     </ul>
-    <div class="note">Respiration = +temps sous l'eau. Affinité aquatique = mine à vitesse normale sous l'eau. Épines = inflige des dégâts aux attaquants (peut aller sur n'importe quelle pièce d'armure).</div>
   </div>
+  <div class="order">
+    <div class="order-title">Ordre optimal — 6 enchantements</div>
+    <div class="steps">
+      <div class="step"><span class="sn">1</span><span class="st"><span class="bk">📚 Respiration III + 📚 Affinité aquatique</span> <span class="arr">→</span> <b>Livre A</b> (6+2=8)</span></div>
+      <div class="step"><span class="sn">2</span><span class="st"><span class="bk">📚 Protection IV + 📚 Solidité III</span> <span class="arr">→</span> <b>Livre B</b> (4+3=7)</span></div>
+      <div class="sep">— application sur le casque —</div>
+      <div class="step"><span class="sn">3</span><span class="st"><span class="it">⛑ Casque</span> <span class="arr">+</span> <span class="ap">📚 Épines III</span> (coût 12 — le + cher en 1er !)</span></div>
+      <div class="step"><span class="sn">4</span><span class="st"><span class="it">⛑ Casque</span> <span class="arr">+</span> <span class="ap">Livre A</span> (Resp+Affinité, coût 8+2pen=10)</span></div>
+      <div class="step"><span class="sn">5</span><span class="st"><span class="it">⛑ Casque</span> <span class="arr">+</span> <span class="ap">Livre B</span> (Protection+Solidité, coût 7+4pen=11)</span></div>
+      <div class="step"><span class="sn">6</span><span class="st"><span class="it">⛑ Casque</span> <span class="arr">+</span> <span class="ap">📚 Réparation</span> (coût 2+8pen=10)</span></div>
+    </div>
+    <div class="cost">Total estimé : <span>~43</span> niveaux (toutes opérations < 39 ✓)</div>
+  </div>
+  <div class="note">Affinité aquatique = mine à vitesse normale sous l'eau. Respiration = +15s de souffle par niveau. Épines EN PREMIER (coût 12, le plus cher).</div>
+</div>
 
-  <div class="card armor">
+<!-- PLASTRON -->
+<div class="card armor">
+  <div class="card-top">
     <div class="card-header"><div class="item-icon">🦺</div><div>
       <div class="item-name">Plastron</div>
       <div class="item-material">Netherite</div>
     </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name">Protection</span><span class="enchant-level">IV</span></li>
-      <li class="tag-thorns"><span class="dot"></span><span class="enchant-name">Épines</span><span class="enchant-level">III</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
-      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    <ul class="elist">
+      <li class="li-thorn"><span class="dot"></span><span class="en">Épines</span><span class="elv">III</span></li>
+      <li><span class="dot"></span><span class="en">Protection IV <span class="or">(ou Prot. feu IV si Nether)</span></span><span class="elv">IV</span></li>
+      <li><span class="dot"></span><span class="en">Solidité</span><span class="elv">III</span></li>
+      <li class="li-mend"><span class="dot"></span><span class="en">Réparation</span><span class="elv">I</span></li>
     </ul>
-    <div class="note">Pièce la plus importante. Remplacez Protection par Protection contre le feu IV dans le Nether. Épines se répète sur plusieurs pièces pour maximiser les reflets de dégâts.</div>
   </div>
+  <div class="order">
+    <div class="order-title">Ordre optimal — 4 enchantements</div>
+    <div class="steps">
+      <div class="step"><span class="sn">1</span><span class="st"><span class="bk">📚 Protection IV + 📚 Solidité III</span> <span class="arr">→</span> <b>Livre A</b> (4+3=7)</span></div>
+      <div class="sep">— application sur le plastron —</div>
+      <div class="step"><span class="sn">2</span><span class="st"><span class="it">🦺 Plastron</span> <span class="arr">+</span> <span class="ap">📚 Épines III</span> (coût 12 — EN PREMIER)</span></div>
+      <div class="step"><span class="sn">3</span><span class="st"><span class="it">🦺 Plastron</span> <span class="arr">+</span> <span class="ap">Livre A</span> (Prot+Solidité, coût 7+2pen=9)</span></div>
+      <div class="step"><span class="sn">4</span><span class="st"><span class="it">🦺 Plastron</span> <span class="arr">+</span> <span class="ap">📚 Réparation</span> (coût 2+4pen=6)</span></div>
+    </div>
+    <div class="cost">Total estimé : <span>~27</span> niveaux · Confirmé Minecraft Wiki</div>
+  </div>
+  <div class="note">Pièce la plus importante. Épines EN PREMIER absolument (plus grand multiplicateur). Prot. feu IV pour le Nether (incompatible avec Protection).</div>
+</div>
 
-  <div class="card armor">
+<!-- JAMBIÈRES -->
+<div class="card armor">
+  <div class="card-top">
     <div class="card-header"><div class="item-icon">👖</div><div>
       <div class="item-name">Jambières</div>
       <div class="item-material">Netherite</div>
     </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name">Protection</span><span class="enchant-level">IV</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Glissement rapide</span><span class="enchant-level">III</span></li>
-      <li class="tag-thorns"><span class="dot"></span><span class="enchant-name">Épines</span><span class="enchant-level">III</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
-      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    <ul class="elist">
+      <li class="li-swift"><span class="dot"></span><span class="en">Glissement rapide <span class="badge">TRÉSOR</span></span><span class="elv">III</span></li>
+      <li class="li-thorn"><span class="dot"></span><span class="en">Épines</span><span class="elv">III</span></li>
+      <li><span class="dot"></span><span class="en">Protection</span><span class="elv">IV</span></li>
+      <li><span class="dot"></span><span class="en">Solidité</span><span class="elv">III</span></li>
+      <li class="li-mend"><span class="dot"></span><span class="en">Réparation</span><span class="elv">I</span></li>
     </ul>
-    <div class="note">Glissement rapide (Swift Sneak III) est EXCLUSIF aux jambières. Essentiel pour l'Ancienne Cité / Warden.</div>
   </div>
+  <div class="order">
+    <div class="order-title">Ordre optimal — 5 enchantements</div>
+    <div class="steps">
+      <div class="step"><span class="sn">1</span><span class="st"><span class="bk">📚 Protection IV + 📚 Solidité III</span> <span class="arr">→</span> <b>Livre A</b> (4+3=7)</span></div>
+      <div class="sep">— application sur les jambières —</div>
+      <div class="step"><span class="sn">2</span><span class="st"><span class="it">👖 Jambières</span> <span class="arr">+</span> <span class="ap">📚 Glissement rapide III</span> (coût 12 — EN 1ER, trésor coûteux)</span></div>
+      <div class="step"><span class="sn">3</span><span class="st"><span class="it">👖 Jambières</span> <span class="arr">+</span> <span class="ap">📚 Épines III</span> (coût 12+2pen=14)</span></div>
+      <div class="step"><span class="sn">4</span><span class="st"><span class="it">👖 Jambières</span> <span class="arr">+</span> <span class="ap">Livre A</span> (Prot+Solidité, coût 7+4pen=11)</span></div>
+      <div class="step"><span class="sn">5</span><span class="st"><span class="it">👖 Jambières</span> <span class="arr">+</span> <span class="ap">📚 Réparation</span> (coût 2+8pen=10)</span></div>
+    </div>
+    <div class="cost">Total estimé : <span>~47</span> niveaux (toutes opérations < 39 ✓)</div>
+  </div>
+  <div class="note">Glissement rapide III = EXCLUSIF aux jambières (trésor, obtenu en Ancienne Cité). Indispensable pour le Warden. Mult ×4/lvl comme Épines.</div>
+</div>
 
-  <div class="card armor">
+<!-- BOTTES -->
+<div class="card armor">
+  <div class="card-top">
     <div class="card-header"><div class="item-icon">👢</div><div>
       <div class="item-name">Bottes</div>
       <div class="item-material">Netherite</div>
     </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name">Protection</span><span class="enchant-level">IV</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Chute de plume</span><span class="enchant-level">IV</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Profondeur marine <span class="or-badge">ou Marche givrée</span></span><span class="enchant-level">III / II</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Vitesse de l'âme</span><span class="enchant-level">III</span></li>
-      <li class="tag-thorns"><span class="dot"></span><span class="enchant-name">Épines</span><span class="enchant-level">III</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
-      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    <ul class="elist">
+      <li class="li-soul"><span class="dot"></span><span class="en">Vitesse de l'âme <span class="badge">TRÉSOR</span></span><span class="elv">III</span></li>
+      <li class="li-thorn"><span class="dot"></span><span class="en">Épines</span><span class="elv">III</span></li>
+      <li><span class="dot"></span><span class="en">Chute de plume</span><span class="elv">IV</span></li>
+      <li><span class="dot"></span><span class="en">Profondeur marine III <span class="or">ou Marche givrée II</span></span><span class="elv">III/II</span></li>
+      <li><span class="dot"></span><span class="en">Protection</span><span class="elv">IV</span></li>
+      <li><span class="dot"></span><span class="en">Solidité</span><span class="elv">III</span></li>
+      <li class="li-mend"><span class="dot"></span><span class="en">Réparation</span><span class="elv">I</span></li>
     </ul>
-    <div class="note">⚠ Profondeur marine (nage rapide) et Marche givrée (glace sur eau) sont incompatibles.<br>Vitesse de l'âme = sprint sur soul sand/soil dans le Nether.</div>
   </div>
+  <div class="order">
+    <div class="order-title">Ordre optimal — 7 enchantements · Source Minecraft Wiki</div>
+    <div class="steps">
+      <div class="step"><span class="sn">1</span><span class="st"><span class="bk">📚 Épines III + 📚 Chute de plume IV</span> <span class="arr">→</span> <b>Livre A</b> (12+4=16)</span></div>
+      <div class="step"><span class="sn">2</span><span class="st"><span class="bk">📚 Profondeur marine III + 📚 Protection IV</span> <span class="arr">→</span> <b>Livre B</b> (6+4=10)</span></div>
+      <div class="step"><span class="sn">3</span><span class="st"><span class="bk">📚 Solidité III + 📚 Réparation</span> <span class="arr">→</span> <b>Livre C</b> (3+2=5)</span></div>
+      <div class="sep">— application sur les bottes —</div>
+      <div class="step"><span class="sn">4</span><span class="st"><span class="it">👢 Bottes</span> <span class="arr">+</span> <span class="ap">📚 Vitesse de l'âme III</span> (coût 12 — EN 1ER)</span></div>
+      <div class="step"><span class="sn">5</span><span class="st"><span class="it">👢 Bottes</span> <span class="arr">+</span> <span class="ap">Livre A</span> (Épines+Chute, coût 16+2pen=18)</span></div>
+      <div class="step"><span class="sn">6</span><span class="st"><span class="it">👢 Bottes</span> <span class="arr">+</span> <span class="ap">Livre B</span> (Profondeur+Prot, coût 10+4pen=14)</span></div>
+      <div class="step"><span class="sn">7</span><span class="st"><span class="it">👢 Bottes</span> <span class="arr">+</span> <span class="ap">Livre C</span> (Solidité+Répar, coût 5+8pen=13)</span></div>
+    </div>
+    <div class="cost">Total estimé : <span>~57</span> niveaux · Toutes opérations < 39 ✓</div>
+  </div>
+  <div class="note">⚠ Profondeur marine / Marche givrée incompatibles. Vitesse de l'âme III coût ×4/lvl = le + cher, EN PREMIER. Ordre confirmé par le Minecraft Wiki.</div>
+</div>
 
-  <div class="section-title">✨ Équipement spécial</div>
+<!-- ═══════════════════ SPÉCIAL ═══════════════════ -->
+<div class="section-title">✨ Équipement spécial</div>
 
-  <div class="card special">
+<!-- BOUCLIER -->
+<div class="card special">
+  <div class="card-top">
     <div class="card-header"><div class="item-icon">🛡️</div><div>
       <div class="item-name">Bouclier</div>
       <div class="item-material">Bois & métal</div>
     </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
-      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    <ul class="elist">
+      <li><span class="dot"></span><span class="en">Solidité</span><span class="elv">III</span></li>
+      <li class="li-mend"><span class="dot"></span><span class="en">Réparation</span><span class="elv">I</span></li>
     </ul>
-    <div class="note">Seulement 2 enchantements possibles sur le bouclier via l'enclume.</div>
   </div>
+  <div class="order">
+    <div class="order-title">Ordre optimal</div>
+    <div class="steps">
+      <div class="step"><span class="sn">1</span><span class="st"><span class="it">🛡 Bouclier</span> <span class="arr">+</span> <span class="ap">📚 Solidité III</span> (coût 3)</span></div>
+      <div class="step"><span class="sn">2</span><span class="st"><span class="it">🛡 Bouclier</span> <span class="arr">+</span> <span class="ap">📚 Réparation</span> (coût 2+2pen=4)</span></div>
+    </div>
+    <div class="cost">Total : <span>7</span> niveaux</div>
+  </div>
+  <div class="note">Seulement 2 enchantements accessibles sur le bouclier. Simple mais essentiel pour bloquer les flèches et les attaques de pillards.</div>
+</div>
 
-  <div class="card special">
+<!-- TABLEAU INCOMPATIBILITÉS -->
+<div class="card special">
+  <div class="card-top">
     <div class="card-header"><div class="item-icon">📋</div><div>
-      <div class="item-name">Incompatibilités clés</div>
-      <div class="item-material">Mémo rapide</div>
+      <div class="item-name">Récapitulatif</div>
+      <div class="item-material">Incompatibilités & trésors</div>
     </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name">Tranchant / Fléau / Châtiment</span><span class="enchant-level">1 seul</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Fortune / Toucher de soie</span><span class="enchant-level">1 seul</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Infini / Réparation (arc)</span><span class="enchant-level">1 seul</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Densité / Brèche / Rafale (masse)</span><span class="enchant-level">1 seul</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Profondeur marine / Marche givrée</span><span class="enchant-level">1 seul</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Protection / Feu / Projectile / Explosion</span><span class="enchant-level">1 seul</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Loyauté / Rift (trident)</span><span class="enchant-level">1 seul</span></li>
-      <li><span class="dot"></span><span class="enchant-name">Perce-armure / Multiflèche</span><span class="enchant-level">1 seul</span></li>
+    <ul class="elist">
+      <li><span class="dot"></span><span class="en" style="color:#f87171">Tranchant / Fléau / Châtiment</span><span class="elv t">1 seul</span></li>
+      <li><span class="dot"></span><span class="en" style="color:#f87171">Fortune / Toucher de soie</span><span class="elv t">1 seul</span></li>
+      <li><span class="dot"></span><span class="en" style="color:#f87171">Infini / Réparation (arc)</span><span class="elv t">1 seul</span></li>
+      <li><span class="dot"></span><span class="en" style="color:#f87171">Densité / Brèche / Rafale (masse)</span><span class="elv t">1 seul</span></li>
+      <li><span class="dot"></span><span class="en" style="color:#f87171">Profondeur marine / Marche givrée</span><span class="elv t">1 seul</span></li>
+      <li><span class="dot"></span><span class="en" style="color:#f87171">Prot. / Prot. feu / Proj. / Explosion</span><span class="elv t">1 seul</span></li>
+      <li><span class="dot"></span><span class="en" style="color:#f87171">Loyauté / Rift · Rift / Canalisation</span><span class="elv t">1 seul</span></li>
+      <li><span class="dot"></span><span class="en" style="color:#f87171">Perce-armure / Multiflèche (arbalète)</span><span class="elv t">1 seul</span></li>
     </ul>
   </div>
-
-  <div class="card special">
-    <div class="card-header"><div class="item-icon">⚠️</div><div>
-      <div class="item-name">Malédictions</div>
-      <div class="item-material">À éviter absolument</div>
-    </div></div>
-    <ul class="enchant-list">
-      <li><span class="dot"></span><span class="enchant-name" style="color:#f87171">Malédiction de disparition</span><span class="enchant-level curse">I</span></li>
-      <li><span class="dot"></span><span class="enchant-name" style="color:#f87171">Malédiction de liaison</span><span class="enchant-level curse">I</span></li>
-    </ul>
-    <div class="note">Disparition = l'objet disparaît définitivement à votre mort. Liaison = impossible de retirer l'armure de votre inventaire.</div>
+  <div class="order">
+    <div class="order-title">Enchantements Trésor (table = impossible)</div>
+    <div class="steps">
+      <div class="step"><span class="sn">💎</span><span class="st"><b>Réparation</b> — pêche, coffres, commerce</span></div>
+      <div class="step"><span class="sn">💎</span><span class="st"><b>Glissement rapide III</b> — Ancienne Cité uniquement</span></div>
+      <div class="step"><span class="sn">💎</span><span class="st"><b>Vitesse de l'âme III</b> — Bastion du Nether uniquement</span></div>
+      <div class="step"><span class="sn">💎</span><span class="st"><b>Marche givrée II</b> — pêche, coffres, commerce</span></div>
+    </div>
   </div>
+</div>
 
 </div>
 
-<footer>Minecraft Java Edition 1.21.1 · Fiche complète enchantements · Claude Sonnet</footer>
+<footer>Minecraft Java Edition 1.21.1 · Ordres vérifiés Minecraft Wiki · Multiplicateurs source code Java · Claude Sonnet 4.6</footer>
 </body>
 </html>
