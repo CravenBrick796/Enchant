@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enchantements Parfaits — Minecraft 1.21.1</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600&family=Lato:wght@300;400&display=swap');
+
+  :root {
+    --bg: #0d0d12;
+    --card: #13131c;
+    --border: #2a2a40;
+    --accent: #7c3aed;
+    --gold: #f5c842;
+    --gold2: #e8a020;
+    --enchant2: #c4b5fd;
+    --text: #e2e0f0;
+    --muted: #7070a0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    padding: 40px 20px 60px;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124,58,237,0.15) 0%, transparent 60%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  header { text-align: center; margin-bottom: 50px; }
+  header::after {
+    content: '';
+    display: block;
+    width: 200px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 20px auto 0;
+  }
+  h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.4rem, 4vw, 2.6rem);
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(245,200,66,0.4);
+    letter-spacing: 2px; line-height: 1.3;
+  }
+  .subtitle {
+    font-family: 'Cinzel', serif;
+    color: var(--muted); font-size: 0.85rem;
+    letter-spacing: 4px; text-transform: uppercase; margin-top: 10px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px; max-width: 1300px; margin: 0 auto;
+  }
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem; letter-spacing: 5px; text-transform: uppercase;
+    color: var(--muted); grid-column: 1 / -1;
+    padding: 10px 0 4px; border-bottom: 1px solid var(--border); margin-top: 10px;
+  }
+
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px; position: relative; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover { transform: translateY(-3px); box-shadow: 0 10px 40px rgba(124,58,237,0.2); }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--card-accent, linear-gradient(90deg, var(--accent), #c4b5fd));
+  }
+  .card.weapons { --card-accent: linear-gradient(90deg, #f87171, #fb923c); }
+  .card.tools   { --card-accent: linear-gradient(90deg, #4ade80, #22d3ee); }
+  .card.armor   { --card-accent: linear-gradient(90deg, #60a5fa, #9b7dff); }
+  .card.ranged  { --card-accent: linear-gradient(90deg, #fb923c, #f5c842); }
+  .card.special { --card-accent: linear-gradient(90deg, #c4b5fd, #f5c842); }
+
+  .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .item-icon {
+    width: 42px; height: 42px; display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem; background: rgba(255,255,255,0.04);
+    border-radius: 8px; border: 1px solid var(--border); flex-shrink: 0;
+  }
+  .item-name { font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 600; color: var(--gold); }
+  .item-material { font-size: 0.72rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+
+  .badge-new {
+    display: inline-block; font-size: 0.6rem;
+    background: rgba(245,200,66,0.15); color: var(--gold);
+    border: 1px solid rgba(245,200,66,0.35); border-radius: 4px;
+    padding: 1px 5px; letter-spacing: 1px; font-family: 'Cinzel', serif;
+    vertical-align: middle; margin-left: 6px;
+  }
+
+  .enchant-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+  .enchant-list li { display: flex; align-items: baseline; gap: 8px; font-size: 0.83rem; line-height: 1.4; }
+  .enchant-name { color: var(--enchant2); font-weight: 400; flex: 1; }
+  .enchant-level {
+    font-family: 'Cinzel', serif; font-size: 0.7rem; color: var(--gold2);
+    background: rgba(245,200,66,0.08); border: 1px solid rgba(245,200,66,0.2);
+    border-radius: 4px; padding: 1px 6px; white-space: nowrap; flex-shrink: 0;
+  }
+  .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 5px; opacity: 0.7; }
+
+  .tag-mending .enchant-level { color: #4ade80; background: rgba(74,222,128,0.08); border-color: rgba(74,222,128,0.25); }
+  .tag-mending .enchant-name  { color: #86efac; }
+  .tag-thorns  .enchant-name  { color: #f9a8d4; }
+  .tag-thorns  .enchant-level { color: #f472b6; background: rgba(244,114,182,0.08); border-color: rgba(244,114,182,0.25); }
+  .tag-new     .enchant-name  { color: #fde68a; }
+  .tag-new     .enchant-level { color: #fbbf24; background: rgba(251,191,36,0.12); border-color: rgba(251,191,36,0.3); }
+
+  .or-badge { font-size: 0.65rem; color: var(--muted); font-style: italic; margin-left: 4px; }
+  .note {
+    margin-top: 14px; padding: 10px 12px;
+    background: rgba(245,200,66,0.05);
+    border-left: 2px solid var(--gold2);
+    border-radius: 0 6px 6px 0;
+    font-size: 0.75rem; color: #c0b07a; line-height: 1.5;
+  }
+  .enchant-level.curse { background: rgba(248,113,113,0.08); border-color: rgba(248,113,113,0.3); color: #f87171; }
+
+  footer { text-align: center; margin-top: 60px; color: var(--muted); font-size: 0.75rem; letter-spacing: 2px; font-family: 'Cinzel', serif; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Enchantements Parfaits</h1>
+  <div class="subtitle">Minecraft Java Edition · Version 1.21.1</div>
+</header>
+
+<div class="grid">
+
+  <div class="section-title">⚔ Armes de mêlée</div>
+
+  <div class="card weapons">
+    <div class="card-header"><div class="item-icon">⚔️</div><div>
+      <div class="item-name">Épée</div>
+      <div class="item-material">Netherite</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name">Tranchant</span><span class="enchant-level">V</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Pillage</span><span class="enchant-level">III</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Châtiment des flammes</span><span class="enchant-level">II</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Recul</span><span class="enchant-level">II</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Balayage</span><span class="enchant-level">III</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    </ul>
+    <div class="note">⚠ Tranchant est incompatible avec Fléau des arthropodes (araignées) et Châtiment (morts-vivants). Balayage (Sweeping Edge) est de retour depuis la 1.20.5.</div>
+  </div>
+
+  <div class="card weapons">
+    <div class="card-header"><div class="item-icon">🪓</div><div>
+      <div class="item-name">Hache</div>
+      <div class="item-material">Netherite</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name">Tranchant</span><span class="enchant-level">V</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Efficacité</span><span class="enchant-level">V</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    </ul>
+    <div class="note">Double usage : coupe le bois rapidement et inflige de bons dégâts au corps-à-corps.</div>
+  </div>
+
+  <div class="card weapons">
+    <div class="card-header"><div class="item-icon">🔱</div><div>
+      <div class="item-name">Trident</div>
+      <div class="item-material">Unique (drop mob)</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name">Piqûre</span><span class="enchant-level">V</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Loyauté</span><span class="enchant-level">III</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Marée montante</span><span class="enchant-level">III</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Canalisation</span><span class="enchant-level">I</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    </ul>
+    <div class="note">⚠ Loyauté incompatible avec Rift. Canalisation nécessite un orage pour invoquer la foudre.</div>
+  </div>
+
+  <div class="card weapons">
+    <div class="card-header"><div class="item-icon">🏏</div><div>
+      <div class="item-name">Masse <span class="badge-new">NOUVEAU 1.21</span></div>
+      <div class="item-material">Breeze Rod + Netherite</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li class="tag-new"><span class="dot"></span><span class="enchant-name">Densité <span class="or-badge">ou Brèche ou Rafale de vent</span></span><span class="enchant-level">V/IV/III</span></li>
+      <li class="tag-new"><span class="dot"></span><span class="enchant-name">Élan (Lunge) <span class="badge-new">1.21.11</span></span><span class="enchant-level">III</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    </ul>
+    <div class="note">⚠ Densité / Brèche / Rafale de vent : choisir un seul.<br>• Densité = +dégâts par bloc chuté<br>• Brèche = réduit l'armure ennemie<br>• Rafale de vent = propulse vers le haut<br>• Élan = propulsion lors de l'attaque Jab (nouveau 1.21.11)</div>
+  </div>
+
+  <div class="section-title">🏹 Armes à distance</div>
+
+  <div class="card ranged">
+    <div class="card-header"><div class="item-icon">🏹</div><div>
+      <div class="item-name">Arc</div>
+      <div class="item-material">Bois & ficelle</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name">Puissance</span><span class="enchant-level">V</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Infini <span class="or-badge">ou Réparation</span></span><span class="enchant-level">I</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Rafale</span><span class="enchant-level">I</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Recul</span><span class="enchant-level">II</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Châtiment des flammes</span><span class="enchant-level">II</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+    </ul>
+    <div class="note">⚠ Infini et Réparation sont incompatibles. Infini = 1 flèche suffit. Réparation = auto-réparation via XP.</div>
+  </div>
+
+  <div class="card ranged">
+    <div class="card-header"><div class="item-icon">🎯</div><div>
+      <div class="item-name">Arbalète</div>
+      <div class="item-material">Bois & mécanique</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name">Perce-armure <span class="or-badge">ou Multiflèche</span></span><span class="enchant-level">IV / I</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Chargement rapide</span><span class="enchant-level">III</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    </ul>
+    <div class="note">⚠ Perce-armure et Multiflèche incompatibles. Perce-armure = traverse l'armure. Multiflèche = 3 flèches simultanées.</div>
+  </div>
+
+  <div class="section-title">⛏ Outils</div>
+
+  <div class="card tools">
+    <div class="card-header"><div class="item-icon">⛏️</div><div>
+      <div class="item-name">Pioche</div>
+      <div class="item-material">Netherite</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name">Efficacité</span><span class="enchant-level">V</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Fortune <span class="or-badge">ou Toucher de soie</span></span><span class="enchant-level">III / I</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    </ul>
+    <div class="note">Faites deux pioches séparées : une Fortune III et une Toucher de soie I — ces deux enchantements sont incompatibles.</div>
+  </div>
+
+  <div class="card tools">
+    <div class="card-header"><div class="item-icon">🪚</div><div>
+      <div class="item-name">Hache (outil)</div>
+      <div class="item-material">Netherite</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name">Efficacité</span><span class="enchant-level">V</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Fortune <span class="or-badge">ou Toucher de soie</span></span><span class="enchant-level">III / I</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    </ul>
+  </div>
+
+  <div class="card tools">
+    <div class="card-header"><div class="item-icon">🪣</div><div>
+      <div class="item-name">Pelle</div>
+      <div class="item-material">Netherite</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name">Efficacité</span><span class="enchant-level">V</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Fortune</span><span class="enchant-level">III</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    </ul>
+  </div>
+
+  <div class="card tools">
+    <div class="card-header"><div class="item-icon">🌾</div><div>
+      <div class="item-name">Houe</div>
+      <div class="item-material">Netherite</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name">Efficacité</span><span class="enchant-level">V</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Fortune <span class="or-badge">ou Toucher de soie</span></span><span class="enchant-level">III / I</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    </ul>
+    <div class="note">Idéale pour récolter rapidement les champignons, feuilles et cultures agricoles.</div>
+  </div>
+
+  <div class="card tools">
+    <div class="card-header"><div class="item-icon">🎣</div><div>
+      <div class="item-name">Canne à pêche</div>
+      <div class="item-material">Bois & ficelle</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name">Chance de la mer</span><span class="enchant-level">III</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Appât</span><span class="enchant-level">III</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    </ul>
+    <div class="note">Chance de la mer = plus de trésors, moins de poissons. Appât = temps d'attente réduit. Compatibles mais ils s'équilibrent.</div>
+  </div>
+
+  <div class="card tools">
+    <div class="card-header"><div class="item-icon">✂️</div><div>
+      <div class="item-name">Ciseaux</div>
+      <div class="item-material">Fer</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name">Efficacité</span><span class="enchant-level">V</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    </ul>
+  </div>
+
+  <div class="section-title">🛡 Armure complète (Netherite)</div>
+
+  <div class="card armor">
+    <div class="card-header"><div class="item-icon">⛑️</div><div>
+      <div class="item-name">Casque</div>
+      <div class="item-material">Netherite</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name">Protection</span><span class="enchant-level">IV</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Respiration</span><span class="enchant-level">III</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Affinité aquatique</span><span class="enchant-level">I</span></li>
+      <li class="tag-thorns"><span class="dot"></span><span class="enchant-name">Épines</span><span class="enchant-level">III</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    </ul>
+    <div class="note">Respiration = +temps sous l'eau. Affinité aquatique = mine à vitesse normale sous l'eau. Épines = inflige des dégâts aux attaquants (peut aller sur n'importe quelle pièce d'armure).</div>
+  </div>
+
+  <div class="card armor">
+    <div class="card-header"><div class="item-icon">🦺</div><div>
+      <div class="item-name">Plastron</div>
+      <div class="item-material">Netherite</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name">Protection</span><span class="enchant-level">IV</span></li>
+      <li class="tag-thorns"><span class="dot"></span><span class="enchant-name">Épines</span><span class="enchant-level">III</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    </ul>
+    <div class="note">Pièce la plus importante. Remplacez Protection par Protection contre le feu IV dans le Nether. Épines se répète sur plusieurs pièces pour maximiser les reflets de dégâts.</div>
+  </div>
+
+  <div class="card armor">
+    <div class="card-header"><div class="item-icon">👖</div><div>
+      <div class="item-name">Jambières</div>
+      <div class="item-material">Netherite</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name">Protection</span><span class="enchant-level">IV</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Glissement rapide</span><span class="enchant-level">III</span></li>
+      <li class="tag-thorns"><span class="dot"></span><span class="enchant-name">Épines</span><span class="enchant-level">III</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    </ul>
+    <div class="note">Glissement rapide (Swift Sneak III) est EXCLUSIF aux jambières. Essentiel pour l'Ancienne Cité / Warden.</div>
+  </div>
+
+  <div class="card armor">
+    <div class="card-header"><div class="item-icon">👢</div><div>
+      <div class="item-name">Bottes</div>
+      <div class="item-material">Netherite</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name">Protection</span><span class="enchant-level">IV</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Chute de plume</span><span class="enchant-level">IV</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Profondeur marine <span class="or-badge">ou Marche givrée</span></span><span class="enchant-level">III / II</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Vitesse de l'âme</span><span class="enchant-level">III</span></li>
+      <li class="tag-thorns"><span class="dot"></span><span class="enchant-name">Épines</span><span class="enchant-level">III</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    </ul>
+    <div class="note">⚠ Profondeur marine (nage rapide) et Marche givrée (glace sur eau) sont incompatibles.<br>Vitesse de l'âme = sprint sur soul sand/soil dans le Nether.</div>
+  </div>
+
+  <div class="section-title">✨ Équipement spécial</div>
+
+  <div class="card special">
+    <div class="card-header"><div class="item-icon">🛡️</div><div>
+      <div class="item-name">Bouclier</div>
+      <div class="item-material">Bois & métal</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name">Solidité</span><span class="enchant-level">III</span></li>
+      <li class="tag-mending"><span class="dot"></span><span class="enchant-name">Réparation</span><span class="enchant-level">I</span></li>
+    </ul>
+    <div class="note">Seulement 2 enchantements possibles sur le bouclier via l'enclume.</div>
+  </div>
+
+  <div class="card special">
+    <div class="card-header"><div class="item-icon">📋</div><div>
+      <div class="item-name">Incompatibilités clés</div>
+      <div class="item-material">Mémo rapide</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name">Tranchant / Fléau / Châtiment</span><span class="enchant-level">1 seul</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Fortune / Toucher de soie</span><span class="enchant-level">1 seul</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Infini / Réparation (arc)</span><span class="enchant-level">1 seul</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Densité / Brèche / Rafale (masse)</span><span class="enchant-level">1 seul</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Profondeur marine / Marche givrée</span><span class="enchant-level">1 seul</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Protection / Feu / Projectile / Explosion</span><span class="enchant-level">1 seul</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Loyauté / Rift (trident)</span><span class="enchant-level">1 seul</span></li>
+      <li><span class="dot"></span><span class="enchant-name">Perce-armure / Multiflèche</span><span class="enchant-level">1 seul</span></li>
+    </ul>
+  </div>
+
+  <div class="card special">
+    <div class="card-header"><div class="item-icon">⚠️</div><div>
+      <div class="item-name">Malédictions</div>
+      <div class="item-material">À éviter absolument</div>
+    </div></div>
+    <ul class="enchant-list">
+      <li><span class="dot"></span><span class="enchant-name" style="color:#f87171">Malédiction de disparition</span><span class="enchant-level curse">I</span></li>
+      <li><span class="dot"></span><span class="enchant-name" style="color:#f87171">Malédiction de liaison</span><span class="enchant-level curse">I</span></li>
+    </ul>
+    <div class="note">Disparition = l'objet disparaît définitivement à votre mort. Liaison = impossible de retirer l'armure de votre inventaire.</div>
+  </div>
+
+</div>
+
+<footer>Minecraft Java Edition 1.21.1 · Fiche complète enchantements · Claude Sonnet</footer>
+</body>
+</html>
